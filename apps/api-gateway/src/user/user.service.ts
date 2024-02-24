@@ -10,26 +10,21 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async findByEmailOrSave(
+  async saveUser(
     email: string,
     username: string,
     providerId: string,
   ): Promise<User> {
-    const user = await this.findOne(email);
-    if (user) {
-      return user;
-    }
-
-    const newUser = await this.userRepository.save({
+    const user = await this.userRepository.save({
       email,
       username,
       provider: Provider.GOOGLE,
       providerId,
     });
-    return newUser;
+    return user;
   }
 
-  async findOne(email: string): Promise<User> {
+  async findOneByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ email });
     return user;
   }

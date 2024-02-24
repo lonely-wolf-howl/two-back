@@ -23,9 +23,9 @@ export class User {
   @Column({ type: 'enum', enum: Provider })
   provider: Provider;
 
-  @Column({ nullable: true })
-  providerId: string;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @Column({ nullable: true })
+  providerId: string;
 }
