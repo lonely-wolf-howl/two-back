@@ -1,66 +1,41 @@
 import {
   Controller,
-  Get,
-  Headers,
   Post,
-  Request,
-  Response,
-  UseGuards,
+  Body,
+  Headers,
+  BadRequestException,
 } from '@nestjs/common';
-import { GoogleAuthGuard } from './google.guard';
-import { Request as Req, Response as Res } from 'express';
 import { AuthService } from './auth.service';
 import { Public } from '../common/decorator/public.decorator';
-import { OAuthUser } from '../types/types';
 import { User } from '../common/decorator/user.decorator';
 import { UserAfterAuth } from '../common/decorator/user.decorator';
+import { SigninReqDto, SignupReqDto } from './dto/req.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Get('ping')
-  async sayPong(): Promise<string> {
-    return 'pong';
-  }
-
-  @Public()
-  @Get('google')
-  @UseGuards(GoogleAuthGuard)
-  async googleAuth(@Request() req: Req) {
-    console.log(req);
-  }
-
-  @Public()
-  @Get('google/redirect')
-  @UseGuards(GoogleAuthGuard)
-  async googleAuthRedirect(@Request() req: Req, @Response() res: Res) {
-    const user: OAuthUser = req.user;
-    /*
-    {
-      email: 'electruc0095@gmail.com',
-      username: 'TILLIDIE',
-      providerId: '101465919459724295856',
-    }
-    */
-
-    const tokens = await this.authService.saveUserAndGetTokens(
-      user.email,
-      user.userName,
-      user.providerId,
+  @Post('signup')
+  async signup(
+    @Body()
+    { username, email, password, confirm, gender, birthyear }: SignupReqDto,
+  ) {
+    if (password !== confirm) throw new BadRequestException();
+    const { id, accessToken, refreshToken } = await this.authService.signup(
+      username,
+      email,
+      password,
+      gender,
+      birthyear,
     );
+    return { id, accessToken, refreshToken };
+  }
 
-    res.cookie('accessToken', tokens.accessToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-    });
-    res.cookie('refreshToken', tokens.refreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-    });
-
-    res.redirect('http://localhost:3000');
+  @Public()
+  @Post('signin')
+  async signin(@Body() { email, password }: SigninReqDto) {
+    return this.authService.signin(email, password);
   }
 
   @Post('refresh')

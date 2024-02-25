@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { RefreshToken } from './entity/refresh-token.entity';
 import { User } from '../user/entity/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -16,10 +21,12 @@ export class AuthService {
     private refreshTokenRepository: Repository<RefreshToken>,
   ) {}
 
-  async saveUserAndGetTokens(
+  async signup(
+    username: string,
     email: string,
-    userName: string,
-    providerId: string,
+    password: string,
+    gender: string,
+    birthyear: number,
   ) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -27,34 +34,55 @@ export class AuthService {
 
     let error;
     try {
-      const user: User = await this.userService.saveUser(
+      const user = await this.userService.findOneByEmail(email);
+      if (user) throw new BadRequestException('user already exists.');
+
+      const saltRounds = 10;
+      const hash = await bcrypt.hash(password, saltRounds);
+
+      const userEntity = queryRunner.manager.create(User, {
+        username,
         email,
-        userName,
-        providerId,
-      );
-      console.log(user);
+        password: hash,
+        gender,
+        birthyear,
+      });
+      await queryRunner.manager.save(userEntity);
 
-      const accessToken = this.genereateAccessToken(user.id);
-
+      const accessToken = this.genereateAccessToken(userEntity.id);
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
-        userId: user.id,
-        token: this.genereateRefreshToken(user.id),
+        user: { id: userEntity.id },
+        token: this.genereateRefreshToken(userEntity.id),
       });
       queryRunner.manager.save(refreshTokenEntity);
 
       await queryRunner.commitTransaction();
 
       return {
+        id: userEntity.id,
         accessToken,
         refreshToken: refreshTokenEntity.token,
       };
+      await queryRunner.release();
     } catch (transactionError) {
       error = transactionError;
       await queryRunner.rollbackTransaction();
+      await queryRunner.release();
     } finally {
       if (error) throw error;
-      await queryRunner.release();
     }
+  }
+
+  async signin(email: string, password: string) {
+    const user = await this.validateUser(email, password);
+
+    const refreshToken = this.genereateRefreshToken(user.id);
+    await this.updateRefreshTokenEntity(user.id, refreshToken);
+
+    return {
+      accessToken: this.genereateAccessToken(user.id),
+      refreshToken,
+    };
   }
 
   private genereateAccessToken(userId: string) {
@@ -65,6 +93,31 @@ export class AuthService {
   private genereateRefreshToken(userId: string) {
     const payload = { sub: userId, tokenType: 'refresh' };
     return this.jwtService.sign(payload, { expiresIn: '30d' });
+  }
+
+  private async updateRefreshTokenEntity(userId: string, refreshToken: string) {
+    let refreshTokenEntity = await this.refreshTokenRepository.findOneBy({
+      user: { id: userId },
+    });
+    if (refreshTokenEntity) {
+      refreshTokenEntity.token = refreshToken;
+    } else {
+      refreshTokenEntity = this.refreshTokenRepository.create({
+        user: { id: userId },
+        token: refreshToken,
+      });
+    }
+    await this.refreshTokenRepository.save(refreshTokenEntity);
+  }
+
+  private async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) throw new UnauthorizedException();
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new UnauthorizedException();
+
+    return user;
   }
 
   async refresh(token: string, userId: string) {

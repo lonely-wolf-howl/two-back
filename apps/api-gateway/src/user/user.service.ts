@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
-import { Provider } from './enum/user.enum';
 
 @Injectable()
 export class UserService {
@@ -10,24 +9,19 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async saveUser(
-    email: string,
-    username: string,
-    providerId: string,
-  ): Promise<User> {
-    let user = await this.userRepository.findOneBy({ email });
+  async getMe(userId: string) {
+    const user: User = await this.userRepository.findOneBy({ id: userId });
+    const result = {
+      username: user.username,
+      email: user.email,
+      gender: user.gender,
+      birthyear: user.birthyear,
+    };
+    return result;
+  }
 
-    if (user) {
-      user.username = username;
-    } else {
-      user = new User();
-
-      user.email = email;
-      user.username = username;
-      user.provider = Provider.GOOGLE;
-      user.providerId = providerId;
-    }
-
-    return this.userRepository.save(user);
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ email });
+    return user;
   }
 }

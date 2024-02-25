@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../user/entity/user.entity';
 
 @Entity()
 export class RefreshToken {
@@ -20,6 +23,7 @@ export class RefreshToken {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column()
-  userId: string;
+  @OneToOne(() => User, (user) => user.refreshToken)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

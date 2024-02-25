@@ -2,14 +2,19 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { Provider } from '../enum/user.enum';
+import { RefreshToken } from '../../auth/entity/refresh-token.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  username: string;
 
   @Column({ unique: true })
   email: string;
@@ -18,14 +23,19 @@ export class User {
   password: string;
 
   @Column()
-  username: string;
+  gender: string;
 
-  @Column({ type: 'enum', enum: Provider })
-  provider: Provider;
+  @Column()
+  birthyear: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @Column({ nullable: true })
-  providerId: string;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {
+    cascade: true,
+  })
+  refreshToken: RefreshToken;
 }
