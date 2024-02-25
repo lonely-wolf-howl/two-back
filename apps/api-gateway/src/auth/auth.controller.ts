@@ -1,9 +1,19 @@
-import { Controller, Get, Request, Response, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Headers,
+  Post,
+  Request,
+  Response,
+  UseGuards,
+} from '@nestjs/common';
 import { GoogleAuthGuard } from './google.guard';
 import { Request as Req, Response as Res } from 'express';
 import { AuthService } from './auth.service';
-import { Public } from './common/decorator/public.decorator';
-import { OAuthUser } from './types/types';
+import { Public } from '../common/decorator/public.decorator';
+import { OAuthUser } from '../types/types';
+import { User } from '../common/decorator/user.decorator';
+import { UserAfterAuth } from '../common/decorator/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -40,23 +50,29 @@ export class AuthController {
       user.userName,
       user.providerId,
     );
-    console.log(tokens);
-    /*
-    {
-      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkNTNiYzE1OS0yNGQyLTQ0MzUtYTU3YS0wNTJkZjA2NTIzZWUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MDg3Nzc2NTMsImV4cCI6MTcwODg2NDA1M30.patjUKCwhBQzm8M9XYWvBgZprhOeEO2dLlkD2KSjYPw',
-      refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkNTNiYzE1OS0yNGQyLTQ0MzUtYTU3YS0wNTJkZjA2NTIzZWUiLCJ0b2tlblR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzA4Nzc3NjUzLCJleHAiOjE3MTEzNjk2NTN9.2U6qiwnekinoi8WBWC5TDyqpyddDLb9NZklUAqJs6gY'
-    }
-    */
 
-    // res.cookie('accessToken', tokens.accessToken, {
-    //   httpOnly: true,
-    //   sameSite: 'strict',
-    // });
-    // res.cookie('refreshToken', tokens.refreshToken, {
-    //   httpOnly: true,
-    //   sameSite: 'strict',
-    // });
+    res.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+    });
 
-    // res.redirect('http://localhost:3000');
+    res.redirect('http://localhost:3000');
+  }
+
+  @Post('refresh')
+  async refresh(
+    @Headers('authorization') authorization,
+    @User() user: UserAfterAuth,
+  ) {
+    const token = /Bearer\s(.+)/.exec(authorization)[1];
+    const { accessToken, refreshToken } = await this.authService.refresh(
+      token,
+      user.id,
+    );
+    return { accessToken, refreshToken };
   }
 }

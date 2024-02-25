@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -33,9 +33,9 @@ export class AuthService {
         providerId,
       );
       console.log(user);
-      console.log(typeof user.id);
 
       const accessToken = this.genereateAccessToken(user.id);
+
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
         userId: user.id,
         token: this.genereateRefreshToken(user.id),
@@ -52,8 +52,8 @@ export class AuthService {
       error = transactionError;
       await queryRunner.rollbackTransaction();
     } finally {
-      await queryRunner.release();
       if (error) throw error;
+      await queryRunner.release();
     }
   }
 
@@ -65,5 +65,20 @@ export class AuthService {
   private genereateRefreshToken(userId: string) {
     const payload = { sub: userId, tokenType: 'refresh' };
     return this.jwtService.sign(payload, { expiresIn: '30d' });
+  }
+
+  async refresh(token: string, userId: string) {
+    const refreshTokenEntity = await this.refreshTokenRepository.findOneBy({
+      token,
+    });
+    if (!refreshTokenEntity) throw new BadRequestException();
+
+    const accessToken = this.genereateAccessToken(userId);
+
+    const refreshToken = this.genereateRefreshToken(userId);
+    refreshTokenEntity.token = refreshToken;
+    await this.refreshTokenRepository.save(refreshTokenEntity);
+
+    return { accessToken, refreshToken };
   }
 }

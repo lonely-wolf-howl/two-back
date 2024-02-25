@@ -7,7 +7,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { IS_PUBLIC_KEY } from './common/decorator/public.decorator';
+import { IS_PUBLIC_KEY } from '../common/decorator/public.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -41,9 +41,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const decoded = this.jwtService.decode(token);
     if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh') {
-      const error = new UnauthorizedException('access token is required.');
-      console.error(error.message, error.stack);
-      throw error;
+      throw new UnauthorizedException('must use access token to refresh.');
     }
 
     return super.canActivate(context);

@@ -15,17 +15,19 @@ export class UserService {
     username: string,
     providerId: string,
   ): Promise<User> {
-    const user = await this.userRepository.save({
-      email,
-      username,
-      provider: Provider.GOOGLE,
-      providerId,
-    });
-    return user;
-  }
+    let user = await this.userRepository.findOneBy({ email });
 
-  async findOneByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOneBy({ email });
-    return user;
+    if (user) {
+      user.username = username;
+    } else {
+      user = new User();
+
+      user.email = email;
+      user.username = username;
+      user.provider = Provider.GOOGLE;
+      user.providerId = providerId;
+    }
+
+    return this.userRepository.save(user);
   }
 }

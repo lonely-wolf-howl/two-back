@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -6,6 +6,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import mysqlConfig from './config/mysql.config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { UserModule } from './user/user.module';
         };
         if (configService.get('STAGE') === 'LOCAL') {
           object = Object.assign(object, {
-            logging: true,
+            logging: false,
           });
         }
         return object;
@@ -40,4 +41,8 @@ import { UserModule } from './user/user.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

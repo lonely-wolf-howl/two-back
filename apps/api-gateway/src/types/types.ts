@@ -1,5 +1,5 @@
 export interface OAuthUser {
   email: string;
-  username: string;
+  userName: string;
   providerId: string;
 }
