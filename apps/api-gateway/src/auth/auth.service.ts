@@ -9,6 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { RefreshToken } from './entity/refresh-token.entity';
 import { User } from '../user/entity/user.entity';
+import { UserDetail } from '../user/entity/user-detail.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -48,6 +49,14 @@ export class AuthService {
         birthyear,
       });
       await queryRunner.manager.save(userEntity);
+
+      const userDetailEntity = queryRunner.manager.create(UserDetail, {
+        user: { id: userEntity.id },
+        username,
+        gender,
+        birthyear,
+      });
+      await queryRunner.manager.save(userDetailEntity);
 
       const accessToken = this.genereateAccessToken(userEntity.id);
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {

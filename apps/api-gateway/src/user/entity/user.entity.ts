@@ -7,26 +7,18 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { RefreshToken } from '../../auth/entity/refresh-token.entity';
+import { UserDetail } from './user-detail.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  username: string;
-
   @Column({ unique: true })
   email: string;
 
   @Column({ nullable: true })
   password: string;
-
-  @Column()
-  gender: string;
-
-  @Column()
-  birthyear: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -38,4 +30,9 @@ export class User {
     cascade: true,
   })
   refreshToken: RefreshToken;
+
+  @OneToOne(() => UserDetail, (userDetail) => userDetail.user, {
+    cascade: true,
+  })
+  userDetail: UserDetail;
 }
