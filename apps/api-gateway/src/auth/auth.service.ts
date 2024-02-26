@@ -58,7 +58,6 @@ export class AuthService {
       });
       await queryRunner.manager.save(userDetailEntity);
 
-      const accessToken = this.genereateAccessToken(userEntity.id);
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
         user: { id: userEntity.id },
         token: this.genereateRefreshToken(userEntity.id),
@@ -69,8 +68,6 @@ export class AuthService {
 
       return {
         id: userEntity.id,
-        accessToken,
-        refreshToken: refreshTokenEntity.token,
       };
       await queryRunner.release();
     } catch (transactionError) {
@@ -90,7 +87,9 @@ export class AuthService {
 
     return {
       accessToken: this.genereateAccessToken(user.id),
+      accessTokenExpiresIn: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1d
       refreshToken,
+      refreshTokenExpiresIn: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30d
     };
   }
 

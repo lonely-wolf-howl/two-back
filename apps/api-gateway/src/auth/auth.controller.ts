@@ -1,9 +1,9 @@
 import {
+  BadRequestException,
   Controller,
   Post,
   Body,
   Headers,
-  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from '../common/decorator/public.decorator';
@@ -22,20 +22,20 @@ export class AuthController {
     { username, email, password, confirm, gender, birthyear }: SignupReqDto,
   ) {
     if (password !== confirm) throw new BadRequestException();
-    const { id, accessToken, refreshToken } = await this.authService.signup(
+    const { id } = await this.authService.signup(
       username,
       email,
       password,
       gender,
       birthyear,
     );
-    return { id, accessToken, refreshToken };
+    return { id };
   }
 
   @Public()
   @Post('signin')
   async signin(@Body() { email, password }: SigninReqDto) {
-    return this.authService.signin(email, password);
+    return await this.authService.signin(email, password);
   }
 
   @Post('refresh')
