@@ -1,14 +1,23 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
-import { UserDetail } from './entity/user-detail.entity';
-import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserDetail])],
   exports: [UserService],
-  controllers: [UserController],
-  providers: [UserService],
+  providers: [
+    UserService,
+    {
+      provide: 'USER_SERVICE',
+      useFactory: () => {
+        return ClientProxyFactory.create({
+          transport: Transport.TCP,
+          options: {
+            host: 'user-service',
+            port: 4001,
+          },
+        });
+      },
+    },
+  ],
 })
 export class UserModule {}

@@ -1,31 +1,65 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
-import { UserDetail } from './entity/user-detail.entity';
-import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(UserDetail)
-    private readonly userDetailRepository: Repository<UserDetail>,
-  ) {}
+  constructor(@Inject('USER_SERVICE') private client: ClientProxy) {}
 
   async getMe(userId: string) {
-    const userDetail: UserDetail = await this.userDetailRepository.findOneBy({
-      user: { id: userId },
-    });
-    const result = {
-      username: userDetail.username,
-      gender: userDetail.gender,
-      birthyear: userDetail.birthyear,
-    };
-    return result;
+    const pattern = { cmd: 'getMe' };
+    const payload = { userId };
+    const { username, gender, birthyear } = await firstValueFrom<{
+      username: string;
+      gender: string;
+      birthyear: number;
+    }>(
+      this.client.send<{ username: string; gender: string; birthyear: number }>(
+        pattern,
+        payload,
+      ),
+    );
+    return { username, gender, birthyear };
   }
 
-  async findOneByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOneBy({ email });
-    return user;
+  async findOneByEmail(email: string) {
+    const pattern = { cmd: 'findOneByEmail' };
+    const payload = email;
+    const { id: userId } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return userId;
+  }
+
+  async createUser(email: string, password: string) {
+    const pattern = { cmd: 'createUser' };
+    const payload = { email, password };
+    const { id: userId } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return userId;
+  }
+
+  async createUserDetail(
+    user: string,
+    username: string,
+    gender: string,
+    birthyear: number,
+  ) {
+    const pattern = { cmd: 'createUserDetail' };
+    const payload = { user, username, gender, birthyear };
+    const { id: userId } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return userId;
+  }
+
+  async validateUser(email: string, password: string) {
+    const pattern = { cmd: 'validate' };
+    const payload = { email, password };
+    const { id: userId } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return userId;
   }
 }
