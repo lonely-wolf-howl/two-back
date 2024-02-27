@@ -33,7 +33,7 @@ export class AuthService {
 
       const newUserId = await this.userService.createUser(email, password);
       const newUserDetailId = await this.userService.createUserDetail({
-        user: { id: userEntity.id },
+        user: newUserId,
         username,
         gender,
         birthyear,
@@ -87,13 +87,13 @@ export class AuthService {
 
   private async updateRefreshTokenEntity(userId: string, refreshToken: string) {
     let refreshTokenEntity = await this.refreshTokenRepository.findOneBy({
-      user: { id: userId },
+      userId,
     });
     if (refreshTokenEntity) {
       refreshTokenEntity.token = refreshToken;
     } else {
       refreshTokenEntity = this.refreshTokenRepository.create({
-        user: { id: userId },
+        userId,
         token: refreshToken,
       });
     }
