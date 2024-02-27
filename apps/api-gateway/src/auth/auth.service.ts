@@ -32,12 +32,12 @@ export class AuthService {
       if (userId) throw new BadRequestException('user already exists.');
 
       const newUserId = await this.userService.createUser(email, password);
-      const newUserDetailId = await this.userService.createUserDetail({
-        user: newUserId,
+      const newUserDetailId = await this.userService.createUserDetail(
+        newUserId,
         username,
         gender,
         birthyear,
-      });
+      );
 
       const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
         userId: newUserId,
@@ -45,15 +45,16 @@ export class AuthService {
       });
       queryRunner.manager.save(refreshTokenEntity);
 
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-
       return {
         userId: newUserId,
         userDetailId: newUserDetailId,
       };
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
     } catch (transactionError) {
       error = transactionError;
+
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
     } finally {

@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/two-back/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/two-back/test/jest-e2e.json",
+    "docker:microservice": "cp ./package.json ./apps/api-gateway && cp ./package.json ./apps/user && docker-compose -p microservice down && docker-compose -p microservice up --remove-orphans"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -28,6 +29,8 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
+    "@sentry/node": "^7.102.1",
+    "@slack/webhook": "^7.0.2",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",

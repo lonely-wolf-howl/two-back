@@ -30,6 +30,6 @@ export class UserDetail {
   updatedAt: Date;
 
   @OneToOne(() => User, (user) => user.userDetail)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn()
   user: User;
 }

@@ -7,9 +7,11 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @MessagePattern({ cmd: 'getMe' })
-  async getMe(
-    userId: string,
-  ): Promise<{ username: string; gender: string; birthyear: number }> {
+  async getMe({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<{ username: string; gender: string; birthyear: number }> {
     return await this.userService.getMe(userId);
   }
 

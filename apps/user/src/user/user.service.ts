@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { UserDetail } from './entity/user-detail.entity';
@@ -17,6 +21,8 @@ export class UserService {
     const userDetail: UserDetail = await this.userDetailRepository.findOneBy({
       user: { id: userId },
     });
+    if (!userDetail) throw new NotFoundException('cannot find user detail.');
+
     const result = {
       username: userDetail.username,
       gender: userDetail.gender,

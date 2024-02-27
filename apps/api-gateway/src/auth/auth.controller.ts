@@ -22,14 +22,14 @@ export class AuthController {
     { username, email, password, confirm, gender, birthyear }: SignupReqDto,
   ) {
     if (password !== confirm) throw new BadRequestException();
-    const { id } = await this.authService.signup(
+    const { userId, userDetailId } = await this.authService.signup(
       username,
       email,
       password,
       gender,
       birthyear,
     );
-    return { id };
+    return { userId, userDetailId };
   }
 
   @Public()
