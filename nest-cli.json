@@ -27,6 +27,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/user/tsconfig.app.json"
       }
+    },
+    "challenge-service": {
+      "type": "application",
+      "root": "apps/challenge",
+      "entryFile": "main",
+      "sourceRoot": "apps/challenge/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/challenge/tsconfig.app.json"
+      }
     }
   }
 }
