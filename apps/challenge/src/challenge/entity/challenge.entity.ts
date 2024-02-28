@@ -15,6 +15,9 @@ export class Challenge {
   id: string;
 
   @Column()
+  host: string;
+
+  @Column()
   title: string;
 
   @Column()

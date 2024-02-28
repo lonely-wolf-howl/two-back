@@ -7,7 +7,7 @@ export class UserService {
   constructor(@Inject('USER_SERVICE') private client: ClientProxy) {}
 
   async getMe(userId: string) {
-    const pattern = { cmd: 'getMe' };
+    const pattern = { cmd: 'get-me' };
     const payload = { userId };
     const { username, gender, birthyear } = await firstValueFrom<{
       username: string;
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   async findOneByEmail(email: string) {
-    const pattern = { cmd: 'findOneByEmail' };
+    const pattern = { cmd: 'find-one-by-email' };
     const payload = email;
     const { id: userId } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),
@@ -32,7 +32,7 @@ export class UserService {
   }
 
   async createUser(email: string, password: string) {
-    const pattern = { cmd: 'createUser' };
+    const pattern = { cmd: 'create-user' };
     const payload = { email, password };
     const { id: userId } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),
@@ -46,7 +46,7 @@ export class UserService {
     gender: string,
     birthyear: number,
   ) {
-    const pattern = { cmd: 'createUserDetail' };
+    const pattern = { cmd: 'create-user-detail' };
     const payload = { userId, username, gender, birthyear };
     const { id: userDetailId } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),
@@ -55,7 +55,7 @@ export class UserService {
   }
 
   async validateUser(email: string, password: string) {
-    const pattern = { cmd: 'validate' };
+    const pattern = { cmd: 'validate-user' };
     const payload = { email, password };
     const { id: userId } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),

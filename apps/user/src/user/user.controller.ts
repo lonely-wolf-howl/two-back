@@ -6,7 +6,7 @@ import { MessagePattern } from '@nestjs/microservices';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @MessagePattern({ cmd: 'getMe' })
+  @MessagePattern({ cmd: 'get-me' })
   async getMe({
     userId,
   }: {
@@ -15,12 +15,12 @@ export class UserController {
     return await this.userService.getMe(userId);
   }
 
-  @MessagePattern({ cmd: 'findOneByEmail' })
+  @MessagePattern({ cmd: 'find-one-by-email' })
   async findOneByEmail(email: string): Promise<{ id: string }> {
     return await this.userService.findOneByEmail(email);
   }
 
-  @MessagePattern({ cmd: 'createUser' })
+  @MessagePattern({ cmd: 'create-user' })
   async createUser({
     email,
     password,
@@ -31,7 +31,7 @@ export class UserController {
     return await this.userService.createUser(email, password);
   }
 
-  @MessagePattern({ cmd: 'createUserDetail' })
+  @MessagePattern({ cmd: 'create-user-detail' })
   async createUserDetail({
     userId,
     username,
@@ -51,8 +51,8 @@ export class UserController {
     );
   }
 
-  @MessagePattern({ cmd: 'validate' })
-  async validate({
+  @MessagePattern({ cmd: 'validate-user' })
+  async validateUser({
     email,
     password,
   }: {

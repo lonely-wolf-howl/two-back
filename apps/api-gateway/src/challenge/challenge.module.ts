@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { ChallengeController } from './challenge.controller';
 import { ChallengeService } from './challenge.service';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [ChallengeController],
   providers: [
     ChallengeService,
