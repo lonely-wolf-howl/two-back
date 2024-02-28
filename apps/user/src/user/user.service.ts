@@ -48,9 +48,9 @@ export class UserService {
     return { id: user.id };
   }
 
-  async createUserDetail(user, username, gender, birthyear) {
+  async createUserDetail(userId, username, gender, birthyear) {
     const userDetailEntity = this.userDetailRepository.create({
-      user,
+      user: { id: userId },
       username,
       gender,
       birthyear,

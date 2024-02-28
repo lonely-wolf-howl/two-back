@@ -33,18 +33,18 @@ export class UserController {
 
   @MessagePattern({ cmd: 'createUserDetail' })
   async createUserDetail({
-    user,
+    userId,
     username,
     gender,
     birthyear,
   }: {
-    user: string;
+    userId: string;
     username: string;
     gender: string;
     birthyear: number;
   }): Promise<{ id: string }> {
     return await this.userService.createUserDetail(
-      user,
+      userId,
       username,
       gender,
       birthyear,

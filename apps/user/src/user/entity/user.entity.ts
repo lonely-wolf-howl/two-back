@@ -25,8 +25,6 @@ export class User {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToOne(() => UserDetail, (userDetail) => userDetail.user, {
-    cascade: true,
-  })
+  @OneToOne(() => UserDetail, (userDetail) => userDetail.user)
   userDetail: UserDetail;
 }

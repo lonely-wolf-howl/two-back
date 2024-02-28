@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
 import { SentryInterceptor } from './common/interceptor/sentry.interceptor';
 
 async function bootstrap() {
@@ -13,6 +14,12 @@ async function bootstrap() {
         port: 4002,
       },
     },
+  );
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
   );
 
   app.useGlobalInterceptors(new SentryInterceptor());

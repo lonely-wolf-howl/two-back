@@ -41,17 +41,17 @@ export class UserService {
   }
 
   async createUserDetail(
-    user: string,
+    userId: string,
     username: string,
     gender: string,
     birthyear: number,
   ) {
     const pattern = { cmd: 'createUserDetail' };
-    const payload = { user, username, gender, birthyear };
-    const { id: userId } = await firstValueFrom<{ id: string }>(
+    const payload = { userId, username, gender, birthyear };
+    const { id: userDetailId } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),
     );
-    return userId;
+    return userDetailId;
   }
 
   async validateUser(email: string, password: string) {
