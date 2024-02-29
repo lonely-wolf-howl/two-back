@@ -12,12 +12,18 @@ export class RecordController {
     return await this.recordService.create(payload);
   }
 
-  // @MessagePattern({ cmd: 'read-average' })
-  // async readAverage(): Promise<{
-  //   weight: number;
-  //   muscle: number;
-  //   fat: number;
-  // }> {
-  //   return await this.recordService.readAverage();
-  // }
+  @MessagePattern({ cmd: 'read-average' })
+  async readAverage({
+    gender,
+    birthyear,
+  }: {
+    gender: string;
+    birthyear: number;
+  }): Promise<{
+    weight: number;
+    muscle: number;
+    fat: number;
+  }> {
+    return await this.recordService.readAverage(gender, birthyear);
+  }
 }

@@ -17,7 +17,7 @@ export class RecordController {
   }
 
   @Get()
-  async readAverage() {
-    return await this.recordService.readAverage();
+  async readAverage(@User() user: UserAfterAuth) {
+    return await this.recordService.readAverage(user.id);
   }
 }

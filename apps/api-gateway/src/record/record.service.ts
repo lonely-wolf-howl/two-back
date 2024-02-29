@@ -22,9 +22,11 @@ export class RecordService {
     return id;
   }
 
-  async readAverage() {
+  async readAverage(userId: string) {
+    const { gender, birthyear } = await this.userService.getMe(userId);
+
     const pattern = { cmd: 'read-average' };
-    const payload = {};
+    const payload = { gender, birthyear };
     const { weight, muscle, fat } = await firstValueFrom<{
       weight: number;
       muscle: string;
