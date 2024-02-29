@@ -29,10 +29,10 @@ export class RecordService {
   }
 
   async readAverage(gender: string, birthyear: number) {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
+    const current = new Date();
+    const currentyear = current.getFullYear();
 
-    const ageRange = this.calculateAgeRange(currentYear, birthyear);
+    const ageRange = this.calculateAgeRange(currentyear, birthyear);
 
     const { weight, muscle, fat } = await this.recordRepository
       .createQueryBuilder('entity')
@@ -40,7 +40,7 @@ export class RecordService {
       .addSelect('AVG(entity.muscle)', 'muscle')
       .addSelect('AVG(entity.fat)', 'fat')
       .where(
-        `(${currentYear} - entity.birthyear) BETWEEN :ageRangeFrom AND :ageRangeTo`,
+        `(${currentyear} - entity.birthyear) BETWEEN :ageRangeFrom AND :ageRangeTo`,
         { ageRangeFrom: ageRange.from, ageRangeTo: ageRange.to },
       )
       .andWhere('entity.gender = :gender', { gender })
@@ -54,10 +54,10 @@ export class RecordService {
   }
 
   private calculateAgeRange(
-    currentYear: number,
+    currentyear: number,
     birthyear: number,
   ): { from: number; to: number } {
-    const ageDifference = currentYear - birthyear;
+    const ageDifference = currentyear - birthyear;
     const ageRangeFrom = Math.floor(ageDifference / 10) * 10;
     const ageRangeTo = ageRangeFrom + 9;
 

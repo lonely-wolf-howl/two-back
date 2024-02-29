@@ -16,7 +16,7 @@ export class RecordController {
     return await this.recordService.create(user.id, body);
   }
 
-  @Get()
+  @Get('average')
   async readAverage(@User() user: UserAfterAuth) {
     return await this.recordService.readAverage(user.id);
   }
