@@ -10,8 +10,8 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: 'user-service',
-        port: 4001,
+        host: 'record-service',
+        port: 4003,
       },
     },
   );
@@ -25,6 +25,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SentryInterceptor());
 
   await app.listen();
-  console.log(`USER-SERVICE listening on 4001 for TCP!`);
+  console.log(`RECORD-SERVICE listening on 4003 for TCP!`);
 }
 bootstrap();

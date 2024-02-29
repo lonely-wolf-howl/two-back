@@ -36,6 +36,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/challenge/tsconfig.app.json"
       }
+    },
+    "record-service": {
+      "type": "application",
+      "root": "apps/record",
+      "entryFile": "main",
+      "sourceRoot": "apps/record/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/record/tsconfig.app.json"
+      }
     }
   }
 }
