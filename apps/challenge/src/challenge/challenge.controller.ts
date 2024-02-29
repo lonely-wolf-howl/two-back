@@ -22,7 +22,7 @@ export class ChallengeController {
   }: {
     page: number;
     size: number;
-  }): Promise<Challenge[]> {
+  }): Promise<{ total: number; challenges: Challenge[] }> {
     return await this.challengeService.readAll(page, size);
   }
 }

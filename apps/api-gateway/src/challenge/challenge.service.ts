@@ -33,9 +33,15 @@ export class ChallengeService {
   async readAll(page: number, size: number) {
     const pattern = { cmd: 'read-all' };
     const payload = { page, size };
-    const challenges = await firstValueFrom<ReadChallengeResponseDto[]>(
-      this.client.send<ReadChallengeResponseDto[]>(pattern, payload),
+    const { total, challenges } = await firstValueFrom<{
+      total: number;
+      challenges: ReadChallengeResponseDto[];
+    }>(
+      this.client.send<{
+        total: number;
+        challenges: ReadChallengeResponseDto[];
+      }>(pattern, payload),
     );
-    return challenges;
+    return { total, challenges };
   }
 }

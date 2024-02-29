@@ -89,7 +89,7 @@ export class ChallengeService {
   }
 
   async readAll(page: number, size: number) {
-    const challenges = await this.challengeRepository.find({
+    const [challenges, total] = await this.challengeRepository.findAndCount({
       skip: (page - 1) * size,
       take: size,
       order: {
@@ -97,6 +97,6 @@ export class ChallengeService {
       },
       relations: ['goal'],
     });
-    return challenges;
+    return { total, challenges };
   }
 }
