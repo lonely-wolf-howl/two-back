@@ -27,7 +27,7 @@ exports.RecordModule = RecordModule = __decorate([
                     return microservices_1.ClientProxyFactory.create({
                         transport: microservices_1.Transport.TCP,
                         options: {
-                            host: 'record-service',
+                            host: 'localhost',
                             port: 4003,
                         },
                     });

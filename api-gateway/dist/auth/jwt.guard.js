@@ -38,10 +38,10 @@ let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
             throw new common_1.UnauthorizedException();
         const token = /Bearer\s(.+)/.exec(authorization)[1];
         if (!token)
-            throw new common_1.UnauthorizedException('access token is required.');
+            throw new common_1.UnauthorizedException('access-token is required.');
         const decoded = this.jwtService.decode(token);
         if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh') {
-            throw new common_1.UnauthorizedException('must use access token to refresh.');
+            throw new common_1.UnauthorizedException('must use access-token to refresh.');
         }
         return super.canActivate(context);
     }
