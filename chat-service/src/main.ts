@@ -1,19 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { SentryInterceptor } from './common/interceptor/sentry.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
-    options: {
-      host: 'localhost',
-      port: 4004,
-    },
-  });
+  const port = 8080;
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -23,8 +15,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new SentryInterceptor());
 
-  await app.startAllMicroservices();
-  await app.listen(4004);
-  console.log(`CHAT-SERVICE listening on 4004 for TCP!`);
+  await app.listen(port);
+  console.log(`CHAT-SERVICE listening on ${port}!`);
 }
 bootstrap();
