@@ -38,7 +38,7 @@ exports.AppModule = AppModule = __decorate([
                     };
                     if (configService.get('STAGE') === 'LOCAL') {
                         object = Object.assign(object, {
-                            logging: true,
+                            logging: false,
                         });
                     }
                     return object;
