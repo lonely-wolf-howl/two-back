@@ -1,4 +1,4 @@
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,7 +7,6 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
 } from '@nestjs/websockets';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -30,10 +29,7 @@ export class ChatsGateway
     this.logger.log('constructor');
   }
 
-  @WebSocketServer()
-  server: Server;
-
-  afterInit(server: Server) {
+  afterInit() {
     this.logger.log('init');
   }
 

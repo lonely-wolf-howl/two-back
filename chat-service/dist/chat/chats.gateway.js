@@ -25,7 +25,7 @@ let ChatsGateway = class ChatsGateway {
         this.logger = new common_1.Logger('CHAT-SERVICE');
         this.logger.log('constructor');
     }
-    afterInit(server) {
+    afterInit() {
         this.logger.log('init');
     }
     async handleConnection(socket) {
@@ -34,14 +34,9 @@ let ChatsGateway = class ChatsGateway {
     async handleDisconnect(socket) {
         this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
     }
-    async handleSubmitChat(message, socket) {
-    }
+    async handleSubmitChat(message, socket) { }
 };
 exports.ChatsGateway = ChatsGateway;
-__decorate([
-    (0, websockets_1.WebSocketServer)(),
-    __metadata("design:type", socket_io_1.Server)
-], ChatsGateway.prototype, "server", void 0);
 __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
