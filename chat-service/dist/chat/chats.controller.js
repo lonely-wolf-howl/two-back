@@ -12,8 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatsController = void 0;
 const common_1 = require("@nestjs/common");
 let ChatsController = class ChatsController {
-    constructor() { }
-    async sayPong() {
+    async pong() {
         return await { message: 'pong' };
     }
 };
@@ -23,9 +22,8 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], ChatsController.prototype, "sayPong", null);
+], ChatsController.prototype, "pong", null);
 exports.ChatsController = ChatsController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [])
+    (0, common_1.Controller)()
 ], ChatsController);
 //# sourceMappingURL=chats.controller.js.map

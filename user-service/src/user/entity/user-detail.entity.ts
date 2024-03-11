@@ -23,6 +23,9 @@ export class UserDetail {
   @Column()
   birthyear: number;
 
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

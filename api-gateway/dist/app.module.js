@@ -15,6 +15,7 @@ const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
 const challenge_module_1 = require("./challenge/challenge.module");
 const record_module_1 = require("./record/record.module");
+const follow_module_1 = require("./follow/follow.module");
 const logger_middleware_1 = require("./common/middleware/logger.middleware");
 let AppModule = class AppModule {
     configure(consumer) {
@@ -54,6 +55,7 @@ exports.AppModule = AppModule = __decorate([
             user_module_1.UserModule,
             challenge_module_1.ChallengeModule,
             record_module_1.RecordModule,
+            follow_module_1.FollowModule,
         ],
         controllers: [],
         providers: [],

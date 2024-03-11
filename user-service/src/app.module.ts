@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
+import { FollowModule } from './follow/follow.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import mysqlConfig from './config/mysql.config';
@@ -33,6 +34,7 @@ import sentryConfig from './config/sentry.config';
       },
     }),
     UserModule,
+    FollowModule,
   ],
   controllers: [],
   providers: [],

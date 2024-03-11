@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ChallengeModule } from './challenge/challenge.module';
 import { RecordModule } from './record/record.module';
+import { FollowModule } from './follow/follow.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
@@ -39,6 +40,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     UserModule,
     ChallengeModule,
     RecordModule,
+    FollowModule,
   ],
   controllers: [],
   providers: [],

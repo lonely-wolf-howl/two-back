@@ -22,9 +22,18 @@ export class UserService {
     return { username, gender, birthyear };
   }
 
+  async findOneById(id: string) {
+    const pattern = { cmd: 'find-one-by-id' };
+    const payload = { id };
+    const { id: userId } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return userId;
+  }
+
   async findOneByEmail(email: string) {
     const pattern = { cmd: 'find-one-by-email' };
-    const payload = email;
+    const payload = { email };
     const { id: userId } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),
     );

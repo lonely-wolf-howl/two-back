@@ -9,7 +9,14 @@ export declare class UserController {
         gender: string;
         birthyear: number;
     }>;
-    findOneByEmail(email: string): Promise<{
+    findOneById({ userId }: {
+        userId: string;
+    }): Promise<{
+        id: string;
+    }>;
+    findOneByEmail({ email }: {
+        email: string;
+    }): Promise<{
         id: string;
     }>;
     createUser({ email, password, }: {

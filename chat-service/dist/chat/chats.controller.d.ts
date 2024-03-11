@@ -1,6 +1,5 @@
 export declare class ChatsController {
-    constructor();
-    sayPong(): Promise<{
+    pong(): Promise<{
         message: string;
     }>;
 }

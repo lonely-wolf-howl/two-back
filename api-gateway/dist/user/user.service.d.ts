@@ -7,6 +7,7 @@ export declare class UserService {
         gender: string;
         birthyear: number;
     }>;
+    findOneById(id: string): Promise<string>;
     findOneByEmail(email: string): Promise<string>;
     createUser(email: string, password: string): Promise<string>;
     createUserDetail(userId: string, username: string, gender: string, birthyear: number): Promise<string>;

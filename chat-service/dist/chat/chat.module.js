@@ -21,6 +21,7 @@ exports.ChatModule = ChatModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([chatRoom_entity_1.ChatRoom, message_entity_1.Message])],
         controllers: [chats_controller_1.ChatsController],
         providers: [chats_gateway_1.ChatsGateway],
+        exports: [chats_gateway_1.ChatsGateway],
     })
 ], ChatModule);
 //# sourceMappingURL=chat.module.js.map

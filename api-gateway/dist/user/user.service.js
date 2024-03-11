@@ -26,9 +26,15 @@ let UserService = class UserService {
         const { username, gender, birthyear } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return { username, gender, birthyear };
     }
+    async findOneById(id) {
+        const pattern = { cmd: 'find-one-by-id' };
+        const payload = { id };
+        const { id: userId } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return userId;
+    }
     async findOneByEmail(email) {
         const pattern = { cmd: 'find-one-by-email' };
-        const payload = email;
+        const payload = { email };
         const { id: userId } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return userId;
     }

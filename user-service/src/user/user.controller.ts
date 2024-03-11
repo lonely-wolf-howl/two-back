@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MessagePattern } from '@nestjs/microservices';
 
-@Controller('users')
+@Controller()
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -15,8 +15,13 @@ export class UserController {
     return await this.userService.getMe(userId);
   }
 
+  @MessagePattern({ cmd: 'find-one-by-id' })
+  async findOneById({ userId }: { userId: string }): Promise<{ id: string }> {
+    return await this.userService.findOneById(userId);
+  }
+
   @MessagePattern({ cmd: 'find-one-by-email' })
-  async findOneByEmail(email: string): Promise<{ id: string }> {
+  async findOneByEmail({ email }: { email: string }): Promise<{ id: string }> {
     return await this.userService.findOneByEmail(email);
   }
 

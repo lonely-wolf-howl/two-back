@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const user_module_1 = require("./user/user.module");
+const follow_module_1 = require("./follow/follow.module");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const mysql_config_1 = require("./config/mysql.config");
@@ -45,6 +46,7 @@ exports.AppModule = AppModule = __decorate([
                 },
             }),
             user_module_1.UserModule,
+            follow_module_1.FollowModule,
         ],
         controllers: [],
         providers: [],

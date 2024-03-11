@@ -20,7 +20,10 @@ let UserController = class UserController {
     async getMe({ userId, }) {
         return await this.userService.getMe(userId);
     }
-    async findOneByEmail(email) {
+    async findOneById({ userId }) {
+        return await this.userService.findOneById(userId);
+    }
+    async findOneByEmail({ email }) {
         return await this.userService.findOneByEmail(email);
     }
     async createUser({ email, password, }) {
@@ -41,9 +44,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getMe", null);
 __decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'find-one-by-id' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findOneById", null);
+__decorate([
     (0, microservices_1.MessagePattern)({ cmd: 'find-one-by-email' }),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findOneByEmail", null);
 __decorate([
@@ -65,7 +74,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "validateUser", null);
 exports.UserController = UserController = __decorate([
-    (0, common_1.Controller)('users'),
+    (0, common_1.Controller)(),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

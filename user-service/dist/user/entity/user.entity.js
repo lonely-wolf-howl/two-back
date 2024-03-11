@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const user_detail_entity_1 = require("./user-detail.entity");
+const follow_entity_1 = require("../../follow/entity/follow.entity");
+const follow_message_entity_1 = require("../../follow/entity/follow-message.entity");
 let User = class User {
 };
 exports.User = User;
@@ -39,6 +41,14 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => user_detail_entity_1.UserDetail, (userDetail) => userDetail.user),
     __metadata("design:type", user_detail_entity_1.UserDetail)
 ], User.prototype, "userDetail", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.user),
+    __metadata("design:type", Array)
+], User.prototype, "follow", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => follow_message_entity_1.FollowMessage, (followMessage) => followMessage.user),
+    __metadata("design:type", Array)
+], User.prototype, "followMessage", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

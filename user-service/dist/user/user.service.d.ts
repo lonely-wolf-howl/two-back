@@ -10,6 +10,9 @@ export declare class UserService {
         gender: string;
         birthyear: number;
     }>;
+    findOneById(userId: string): Promise<{
+        id: string;
+    }>;
     findOneByEmail(email: string): Promise<{
         id: string;
     }>;

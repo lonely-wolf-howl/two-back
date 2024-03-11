@@ -32,6 +32,10 @@ __decorate([
     __metadata("design:type", Number)
 ], UserDetail.prototype, "birthyear", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserDetail.prototype, "imageUrl", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], UserDetail.prototype, "createdAt", void 0);

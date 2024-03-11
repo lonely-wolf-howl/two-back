@@ -4,6 +4,7 @@ export declare class UserDetail {
     username: string;
     gender: string;
     birthyear: number;
+    imageUrl: string;
     createdAt: Date;
     updatedAt: Date;
     user: User;
