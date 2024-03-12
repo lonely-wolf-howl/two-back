@@ -38,6 +38,9 @@ let FollowController = class FollowController {
     async rejectFollowMessage(user, followerId) {
         return this.followService.rejectFollowMessage(user.id, followerId);
     }
+    async deleteFollower(user, followerId) {
+        return this.followService.deleteFollower(user.id, followerId);
+    }
 };
 exports.FollowController = FollowController;
 __decorate([
@@ -86,6 +89,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "rejectFollowMessage", null);
+__decorate([
+    (0, common_1.Delete)('/:followerId/friends'),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('followerId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "deleteFollower", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)('follows'),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

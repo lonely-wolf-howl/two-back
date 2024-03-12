@@ -38,4 +38,10 @@ export declare class FollowController {
     }): Promise<{
         id: string;
     }>;
+    deleteFollower({ userId, followerId, }: {
+        userId: string;
+        followerId: string;
+    }): Promise<{
+        id: string;
+    }>;
 }

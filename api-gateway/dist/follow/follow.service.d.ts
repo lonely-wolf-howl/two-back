@@ -11,4 +11,5 @@ export declare class FollowService {
     readAllFollowers(userId: string): Promise<ReadFollowerResponseDto[]>;
     cancelFollowMessage(userId: string, followId: string): Promise<string>;
     rejectFollowMessage(userId: string, followerId: string): Promise<string>;
+    deleteFollower(userId: string, followerId: string): Promise<string>;
 }

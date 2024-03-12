@@ -9,4 +9,5 @@ export declare class FollowController {
     readAllFollowers(user: UserAfterAuth): Promise<import("./dto/res.dto").ReadFollowerResponseDto[]>;
     cancelFollowMessage(user: UserAfterAuth, followId: string): Promise<string>;
     rejectFollowMessage(user: UserAfterAuth, followerId: string): Promise<string>;
+    deleteFollower(user: UserAfterAuth, followerId: string): Promise<string>;
 }

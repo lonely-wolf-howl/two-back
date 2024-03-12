@@ -76,7 +76,7 @@ let FollowService = class FollowService {
     async cancelFollowMessage(userId, followId) {
         const followMessage = await this.findFollowMessageByIds(userId, followId);
         if (!followMessage) {
-            throw new common_1.BadRequestException('내가 보낸 친구 요청을 찾을 수 없습니다.');
+            throw new common_1.NotFoundException('내가 보낸 친구 요청을 찾을 수 없습니다.');
         }
         const result = await this.followMessageRepository.remove(followMessage);
         return { id: result.followId };
@@ -84,10 +84,22 @@ let FollowService = class FollowService {
     async rejectFollowMessage(userId, followerId) {
         const followMessage = await this.findFollowMessageByIds(followerId, userId);
         if (!followMessage) {
-            throw new common_1.BadRequestException('나에게 온 친구 요청을 찾을 수 없습니다.');
+            throw new common_1.NotFoundException('나에게 온 친구 요청을 찾을 수 없습니다.');
         }
         const result = await this.followMessageRepository.remove(followMessage);
         return { id: result.followId };
+    }
+    async deleteFollower(userId, followerId) {
+        const followerToMe = await this.findFollowerByIds(userId, followerId);
+        if (followerToMe) {
+            const result = await this.followerRepository.remove(followerToMe);
+            return { id: result.followerId };
+        }
+        const followerFromMe = await this.findFollowerByIds(followerId, userId);
+        if (followerFromMe) {
+            const result = await this.followerRepository.remove(followerFromMe);
+            return { id: result.followerId };
+        }
     }
     async findFollowMessageByIds(userId, followId) {
         const followMessage = await this.followMessageRepository.findOne({

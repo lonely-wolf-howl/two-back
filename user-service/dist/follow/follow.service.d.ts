@@ -23,6 +23,9 @@ export declare class FollowService {
     rejectFollowMessage(userId: string, followerId: string): Promise<{
         id: string;
     }>;
+    deleteFollower(userId: string, followerId: string): Promise<{
+        id: string;
+    }>;
     findFollowMessageByIds(userId: string, followId: string): Promise<FollowMessage>;
     findFollowerByIds(userId: string, followerId: string): Promise<Follower>;
 }

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FollowMessage } from './entity/follow-message.entity';
@@ -78,7 +82,7 @@ export class FollowService {
   async cancelFollowMessage(userId: string, followId: string) {
     const followMessage = await this.findFollowMessageByIds(userId, followId);
     if (!followMessage) {
-      throw new BadRequestException('내가 보낸 친구 요청을 찾을 수 없습니다.');
+      throw new NotFoundException('내가 보낸 친구 요청을 찾을 수 없습니다.');
     }
 
     const result = await this.followMessageRepository.remove(followMessage);
@@ -88,11 +92,25 @@ export class FollowService {
   async rejectFollowMessage(userId: string, followerId: string) {
     const followMessage = await this.findFollowMessageByIds(followerId, userId);
     if (!followMessage) {
-      throw new BadRequestException('나에게 온 친구 요청을 찾을 수 없습니다.');
+      throw new NotFoundException('나에게 온 친구 요청을 찾을 수 없습니다.');
     }
 
     const result = await this.followMessageRepository.remove(followMessage);
     return { id: result.followId };
+  }
+
+  async deleteFollower(userId: string, followerId: string) {
+    const followerToMe = await this.findFollowerByIds(userId, followerId);
+    if (followerToMe) {
+      const result = await this.followerRepository.remove(followerToMe);
+      return { id: result.followerId };
+    }
+
+    const followerFromMe = await this.findFollowerByIds(followerId, userId);
+    if (followerFromMe) {
+      const result = await this.followerRepository.remove(followerFromMe);
+      return { id: result.followerId };
+    }
   }
 
   async findFollowMessageByIds(userId: string, followId: string) {

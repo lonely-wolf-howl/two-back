@@ -69,4 +69,15 @@ export class FollowController {
   }): Promise<{ id: string }> {
     return await this.followService.rejectFollowMessage(userId, followerId);
   }
+
+  @MessagePattern({ cmd: 'delete-follower' })
+  async deleteFollower({
+    userId,
+    followerId,
+  }: {
+    userId: string;
+    followerId: string;
+  }): Promise<{ id: string }> {
+    return await this.followService.deleteFollower(userId, followerId);
+  }
 }

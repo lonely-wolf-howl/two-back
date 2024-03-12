@@ -83,4 +83,13 @@ export class FollowService {
     );
     return id;
   }
+
+  async deleteFollower(userId: string, followerId: string) {
+    const pattern = { cmd: 'delete-follower' };
+    const payload = { userId, followerId };
+    const { id } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return id;
+  }
 }

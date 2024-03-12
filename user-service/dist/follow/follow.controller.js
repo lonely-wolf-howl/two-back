@@ -35,6 +35,9 @@ let FollowController = class FollowController {
     async rejectFollowMessage({ userId, followerId, }) {
         return await this.followService.rejectFollowMessage(userId, followerId);
     }
+    async deleteFollower({ userId, followerId, }) {
+        return await this.followService.deleteFollower(userId, followerId);
+    }
 };
 exports.FollowController = FollowController;
 __decorate([
@@ -73,6 +76,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "rejectFollowMessage", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'delete-follower' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "deleteFollower", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

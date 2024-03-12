@@ -48,4 +48,12 @@ export class FollowController {
   ) {
     return this.followService.rejectFollowMessage(user.id, followerId);
   }
+
+  @Delete('/:followerId/friends')
+  async deleteFollower(
+    @User() user: UserAfterAuth,
+    @Param('followerId') followerId: string,
+  ) {
+    return this.followService.deleteFollower(user.id, followerId);
+  }
 }

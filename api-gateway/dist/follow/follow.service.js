@@ -64,6 +64,12 @@ let FollowService = class FollowService {
         const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return id;
     }
+    async deleteFollower(userId, followerId) {
+        const pattern = { cmd: 'delete-follower' };
+        const payload = { userId, followerId };
+        const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return id;
+    }
 };
 exports.FollowService = FollowService;
 exports.FollowService = FollowService = __decorate([
