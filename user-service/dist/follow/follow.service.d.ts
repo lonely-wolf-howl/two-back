@@ -11,11 +11,17 @@ export declare class FollowService {
     createFollower(userId: string, followerId: string): Promise<{
         id: string;
     }>;
-    readAllFollowMessage(userId: string): Promise<{
+    readAllFollowMessagesToMe(userId: string): Promise<{
         followMessages: FollowMessage[];
     }>;
-    readAllFollower(userId: string): Promise<{
+    readAllFollowers(userId: string): Promise<{
         followers: Follower[];
+    }>;
+    cancelFollowMessage(userId: string, followId: string): Promise<{
+        id: string;
+    }>;
+    rejectFollowMessage(userId: string, followerId: string): Promise<{
+        id: string;
     }>;
     findFollowMessageByIds(userId: string, followId: string): Promise<FollowMessage>;
     findFollowerByIds(userId: string, followerId: string): Promise<Follower>;

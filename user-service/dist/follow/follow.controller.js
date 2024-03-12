@@ -23,11 +23,17 @@ let FollowController = class FollowController {
     async createFollower({ userId, followerId, }) {
         return await this.followService.createFollower(userId, followerId);
     }
-    async readAllFollowMessage({ userId, }) {
-        return await this.followService.readAllFollowMessage(userId);
+    async readAllFollowMessagesToMe({ userId, }) {
+        return await this.followService.readAllFollowMessagesToMe(userId);
     }
-    async readAllFollower({ userId, }) {
-        return await this.followService.readAllFollower(userId);
+    async readAllFollowers({ userId, }) {
+        return await this.followService.readAllFollowers(userId);
+    }
+    async cancelFollowMessage({ userId, followId, }) {
+        return await this.followService.cancelFollowMessage(userId, followId);
+    }
+    async rejectFollowMessage({ userId, followerId, }) {
+        return await this.followService.rejectFollowMessage(userId, followerId);
     }
 };
 exports.FollowController = FollowController;
@@ -44,17 +50,29 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "createFollower", null);
 __decorate([
-    (0, microservices_1.MessagePattern)({ cmd: 'read-all-follow-message' }),
+    (0, microservices_1.MessagePattern)({ cmd: 'read-all-follow-messages-to-me' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], FollowController.prototype, "readAllFollowMessage", null);
+], FollowController.prototype, "readAllFollowMessagesToMe", null);
 __decorate([
-    (0, microservices_1.MessagePattern)({ cmd: 'read-all-follower' }),
+    (0, microservices_1.MessagePattern)({ cmd: 'read-all-followers' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], FollowController.prototype, "readAllFollower", null);
+], FollowController.prototype, "readAllFollowers", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'cancel-follow-message' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "cancelFollowMessage", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'reject-follow-message' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "rejectFollowMessage", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

@@ -40,17 +40,29 @@ let FollowService = class FollowService {
         const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return id;
     }
-    async readAllFollowMessage(userId) {
-        const pattern = { cmd: 'read-all-follow-message' };
+    async readAllFollowMessagesToMe(userId) {
+        const pattern = { cmd: 'read-all-follow-messages-to-me' };
         const payload = { userId };
         const { followMessages } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return followMessages;
     }
-    async readAllFollower(userId) {
-        const pattern = { cmd: 'read-all-follower' };
+    async readAllFollowers(userId) {
+        const pattern = { cmd: 'read-all-followers' };
         const payload = { userId };
         const { followers } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return followers;
+    }
+    async cancelFollowMessage(userId, followId) {
+        const pattern = { cmd: 'cancel-follow-message' };
+        const payload = { userId, followId };
+        const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return id;
+    }
+    async rejectFollowMessage(userId, followerId) {
+        const pattern = { cmd: 'reject-follow-message' };
+        const payload = { userId, followerId };
+        const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return id;
     }
 };
 exports.FollowService = FollowService;

@@ -16,14 +16,26 @@ export declare class FollowController {
     }): Promise<{
         id: string;
     }>;
-    readAllFollowMessage({ userId, }: {
+    readAllFollowMessagesToMe({ userId, }: {
         userId: string;
     }): Promise<{
         followMessages: FollowMessage[];
     }>;
-    readAllFollower({ userId, }: {
+    readAllFollowers({ userId, }: {
         userId: string;
     }): Promise<{
         followers: Follower[];
+    }>;
+    cancelFollowMessage({ userId, followId, }: {
+        userId: string;
+        followId: string;
+    }): Promise<{
+        id: string;
+    }>;
+    rejectFollowMessage({ userId, followerId, }: {
+        userId: string;
+        followerId: string;
+    }): Promise<{
+        id: string;
     }>;
 }

@@ -50,7 +50,7 @@ export class FollowService {
     return { id: follower.id };
   }
 
-  async readAllFollowMessage(userId: string) {
+  async readAllFollowMessagesToMe(userId: string) {
     const followMessages = await this.followMessageRepository.find({
       where: {
         followId: userId,
@@ -59,13 +59,40 @@ export class FollowService {
     return { followMessages };
   }
 
-  async readAllFollower(userId: string) {
-    const followers = await this.followerRepository.find({
+  async readAllFollowers(userId: string) {
+    const followersToMe = await this.followerRepository.find({
       where: {
         user: { id: userId },
       },
     });
+    const followersFromMe = await this.followerRepository.find({
+      where: {
+        followerId: userId,
+      },
+    });
+
+    const followers = [...followersToMe, ...followersFromMe];
     return { followers };
+  }
+
+  async cancelFollowMessage(userId: string, followId: string) {
+    const followMessage = await this.findFollowMessageByIds(userId, followId);
+    if (!followMessage) {
+      throw new BadRequestException('내가 보낸 친구 요청을 찾을 수 없습니다.');
+    }
+
+    const result = await this.followMessageRepository.remove(followMessage);
+    return { id: result.followId };
+  }
+
+  async rejectFollowMessage(userId: string, followerId: string) {
+    const followMessage = await this.findFollowMessageByIds(followerId, userId);
+    if (!followMessage) {
+      throw new BadRequestException('나에게 온 친구 요청을 찾을 수 없습니다.');
+    }
+
+    const result = await this.followMessageRepository.remove(followMessage);
+    return { id: result.followId };
   }
 
   async findFollowMessageByIds(userId: string, followId: string) {

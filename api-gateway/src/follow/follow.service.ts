@@ -38,8 +38,8 @@ export class FollowService {
     return id;
   }
 
-  async readAllFollowMessage(userId: string) {
-    const pattern = { cmd: 'read-all-follow-message' };
+  async readAllFollowMessagesToMe(userId: string) {
+    const pattern = { cmd: 'read-all-follow-messages-to-me' };
     const payload = { userId };
     const { followMessages } = await firstValueFrom<{
       followMessages: ReadFollowMessageResponseDto[];
@@ -52,8 +52,8 @@ export class FollowService {
     return followMessages;
   }
 
-  async readAllFollower(userId: string) {
-    const pattern = { cmd: 'read-all-follower' };
+  async readAllFollowers(userId: string) {
+    const pattern = { cmd: 'read-all-followers' };
     const payload = { userId };
     const { followers } = await firstValueFrom<{
       followers: ReadFollowerResponseDto[];
@@ -64,5 +64,23 @@ export class FollowService {
       ),
     );
     return followers;
+  }
+
+  async cancelFollowMessage(userId: string, followId: string) {
+    const pattern = { cmd: 'cancel-follow-message' };
+    const payload = { userId, followId };
+    const { id } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return id;
+  }
+
+  async rejectFollowMessage(userId: string, followerId: string) {
+    const pattern = { cmd: 'reject-follow-message' };
+    const payload = { userId, followerId };
+    const { id } = await firstValueFrom<{ id: string }>(
+      this.client.send<{ id: string }>(pattern, payload),
+    );
+    return id;
   }
 }

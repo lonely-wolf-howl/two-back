@@ -7,6 +7,8 @@ export declare class FollowService {
     constructor(client: ClientProxy, userService: UserService);
     createFollowMessage(userId: string, followId: string): Promise<string>;
     createFollower(userId: string, followerId: string): Promise<string>;
-    readAllFollowMessage(userId: string): Promise<ReadFollowMessageResponseDto[]>;
-    readAllFollower(userId: string): Promise<ReadFollowerResponseDto[]>;
+    readAllFollowMessagesToMe(userId: string): Promise<ReadFollowMessageResponseDto[]>;
+    readAllFollowers(userId: string): Promise<ReadFollowerResponseDto[]>;
+    cancelFollowMessage(userId: string, followId: string): Promise<string>;
+    rejectFollowMessage(userId: string, followerId: string): Promise<string>;
 }

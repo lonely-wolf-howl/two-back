@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { User } from '../common/decorator/user.decorator';
 import { UserAfterAuth } from '../common/decorator/user.decorator';
 import { FollowService } from './follow.service';
@@ -15,7 +15,7 @@ export class FollowController {
     return this.followService.createFollowMessage(user.id, followId);
   }
 
-  @Post('/:followerId/accept')
+  @Post('/:followerId/accepts')
   async createFollower(
     @User() user: UserAfterAuth,
     @Param('followerId') followerId: string,
@@ -24,12 +24,28 @@ export class FollowController {
   }
 
   @Get()
-  async readAllFollowMessage(@User() user: UserAfterAuth) {
-    return this.followService.readAllFollowMessage(user.id);
+  async readAllFollowMessagesToMe(@User() user: UserAfterAuth) {
+    return this.followService.readAllFollowMessagesToMe(user.id);
   }
 
   @Get('friends')
-  async readAllFollower(@User() user: UserAfterAuth) {
-    return this.followService.readAllFollower(user.id);
+  async readAllFollowers(@User() user: UserAfterAuth) {
+    return this.followService.readAllFollowers(user.id);
+  }
+
+  @Delete('/:followId/cancel')
+  async cancelFollowMessage(
+    @User() user: UserAfterAuth,
+    @Param('followId') followId: string,
+  ) {
+    return this.followService.cancelFollowMessage(user.id, followId);
+  }
+
+  @Delete('/:followerId/reject')
+  async rejectFollowMessage(
+    @User() user: UserAfterAuth,
+    @Param('followerId') followerId: string,
+  ) {
+    return this.followService.rejectFollowMessage(user.id, followerId);
   }
 }

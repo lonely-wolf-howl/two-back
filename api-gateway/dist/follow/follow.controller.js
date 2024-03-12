@@ -26,11 +26,17 @@ let FollowController = class FollowController {
     async createFollower(user, followerId) {
         return this.followService.createFollower(user.id, followerId);
     }
-    async readAllFollowMessage(user) {
-        return this.followService.readAllFollowMessage(user.id);
+    async readAllFollowMessagesToMe(user) {
+        return this.followService.readAllFollowMessagesToMe(user.id);
     }
-    async readAllFollower(user) {
-        return this.followService.readAllFollower(user.id);
+    async readAllFollowers(user) {
+        return this.followService.readAllFollowers(user.id);
+    }
+    async cancelFollowMessage(user, followId) {
+        return this.followService.cancelFollowMessage(user.id, followId);
+    }
+    async rejectFollowMessage(user, followerId) {
+        return this.followService.rejectFollowMessage(user.id, followerId);
     }
 };
 exports.FollowController = FollowController;
@@ -43,7 +49,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "createFollowMessage", null);
 __decorate([
-    (0, common_1.Post)('/:followerId/accept'),
+    (0, common_1.Post)('/:followerId/accepts'),
     __param(0, (0, user_decorator_1.User)()),
     __param(1, (0, common_1.Param)('followerId')),
     __metadata("design:type", Function),
@@ -56,14 +62,30 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], FollowController.prototype, "readAllFollowMessage", null);
+], FollowController.prototype, "readAllFollowMessagesToMe", null);
 __decorate([
     (0, common_1.Get)('friends'),
     __param(0, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], FollowController.prototype, "readAllFollower", null);
+], FollowController.prototype, "readAllFollowers", null);
+__decorate([
+    (0, common_1.Delete)('/:followId/cancel'),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('followId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "cancelFollowMessage", null);
+__decorate([
+    (0, common_1.Delete)('/:followerId/reject'),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('followerId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "rejectFollowMessage", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)('follows'),
     __metadata("design:paramtypes", [follow_service_1.FollowService])
