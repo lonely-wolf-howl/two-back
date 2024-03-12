@@ -59,6 +59,15 @@ export class FollowService {
     return { followMessages };
   }
 
+  async readAllFollower(userId: string) {
+    const followers = await this.followerRepository.find({
+      where: {
+        user: { id: userId },
+      },
+    });
+    return { followers };
+  }
+
   async findFollowMessageByIds(userId: string, followId: string) {
     const followMessage = await this.followMessageRepository.findOne({
       where: {

@@ -29,6 +29,9 @@ let FollowController = class FollowController {
     async readAllFollowMessage(user) {
         return this.followService.readAllFollowMessage(user.id);
     }
+    async readAllFollower(user) {
+        return this.followService.readAllFollower(user.id);
+    }
 };
 exports.FollowController = FollowController;
 __decorate([
@@ -54,6 +57,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "readAllFollowMessage", null);
+__decorate([
+    (0, common_1.Get)('friends'),
+    __param(0, (0, user_decorator_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "readAllFollower", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)('follows'),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

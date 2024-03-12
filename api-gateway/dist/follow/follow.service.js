@@ -41,10 +41,16 @@ let FollowService = class FollowService {
         return id;
     }
     async readAllFollowMessage(userId) {
-        const pattern = { cmd: 'read-all-followe-message' };
+        const pattern = { cmd: 'read-all-follow-message' };
         const payload = { userId };
         const { followMessages } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return followMessages;
+    }
+    async readAllFollower(userId) {
+        const pattern = { cmd: 'read-all-follower' };
+        const payload = { userId };
+        const { followers } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return followers;
     }
 };
 exports.FollowService = FollowService;

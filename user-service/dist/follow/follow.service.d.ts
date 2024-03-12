@@ -14,6 +14,9 @@ export declare class FollowService {
     readAllFollowMessage(userId: string): Promise<{
         followMessages: FollowMessage[];
     }>;
+    readAllFollower(userId: string): Promise<{
+        followers: Follower[];
+    }>;
     findFollowMessageByIds(userId: string, followId: string): Promise<FollowMessage>;
     findFollowerByIds(userId: string, followerId: string): Promise<Follower>;
 }

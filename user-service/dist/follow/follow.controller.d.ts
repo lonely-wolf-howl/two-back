@@ -1,5 +1,6 @@
 import { FollowService } from './follow.service';
 import { FollowMessage } from './entity/follow-message.entity';
+import { Follower } from './entity/follower.entity';
 export declare class FollowController {
     private followService;
     constructor(followService: FollowService);
@@ -19,5 +20,10 @@ export declare class FollowController {
         userId: string;
     }): Promise<{
         followMessages: FollowMessage[];
+    }>;
+    readAllFollower({ userId, }: {
+        userId: string;
+    }): Promise<{
+        followers: Follower[];
     }>;
 }

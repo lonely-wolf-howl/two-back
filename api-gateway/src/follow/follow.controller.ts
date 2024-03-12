@@ -27,4 +27,9 @@ export class FollowController {
   async readAllFollowMessage(@User() user: UserAfterAuth) {
     return this.followService.readAllFollowMessage(user.id);
   }
+
+  @Get('friends')
+  async readAllFollower(@User() user: UserAfterAuth) {
+    return this.followService.readAllFollower(user.id);
+  }
 }

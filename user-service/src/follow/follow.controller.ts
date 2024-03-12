@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { FollowService } from './follow.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { FollowMessage } from './entity/follow-message.entity';
+import { Follower } from './entity/follower.entity';
 
 @Controller()
 export class FollowController {
@@ -29,12 +30,21 @@ export class FollowController {
     return await this.followService.createFollower(userId, followerId);
   }
 
-  @MessagePattern({ cmd: 'read-all-followe-message' })
+  @MessagePattern({ cmd: 'read-all-follow-message' })
   async readAllFollowMessage({
     userId,
   }: {
     userId: string;
   }): Promise<{ followMessages: FollowMessage[] }> {
     return await this.followService.readAllFollowMessage(userId);
+  }
+
+  @MessagePattern({ cmd: 'read-all-follower' })
+  async readAllFollower({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<{ followers: Follower[] }> {
+    return await this.followService.readAllFollower(userId);
   }
 }

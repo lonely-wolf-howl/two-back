@@ -1,6 +1,6 @@
 import { ClientProxy } from '@nestjs/microservices';
 import { UserService } from '../user/user.service';
-import { ReadFollowMessageResponseDto } from './dto/res.dto';
+import { ReadFollowMessageResponseDto, ReadFollowerResponseDto } from './dto/res.dto';
 export declare class FollowService {
     private client;
     private userService;
@@ -8,4 +8,5 @@ export declare class FollowService {
     createFollowMessage(userId: string, followId: string): Promise<string>;
     createFollower(userId: string, followerId: string): Promise<string>;
     readAllFollowMessage(userId: string): Promise<ReadFollowMessageResponseDto[]>;
+    readAllFollower(userId: string): Promise<ReadFollowerResponseDto[]>;
 }

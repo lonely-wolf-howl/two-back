@@ -26,6 +26,9 @@ let FollowController = class FollowController {
     async readAllFollowMessage({ userId, }) {
         return await this.followService.readAllFollowMessage(userId);
     }
+    async readAllFollower({ userId, }) {
+        return await this.followService.readAllFollower(userId);
+    }
 };
 exports.FollowController = FollowController;
 __decorate([
@@ -41,11 +44,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "createFollower", null);
 __decorate([
-    (0, microservices_1.MessagePattern)({ cmd: 'read-all-followe-message' }),
+    (0, microservices_1.MessagePattern)({ cmd: 'read-all-follow-message' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "readAllFollowMessage", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'read-all-follower' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "readAllFollower", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

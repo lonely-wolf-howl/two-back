@@ -6,4 +6,5 @@ export declare class FollowController {
     createFollowMessage(user: UserAfterAuth, followId: string): Promise<string>;
     createFollower(user: UserAfterAuth, followerId: string): Promise<string>;
     readAllFollowMessage(user: UserAfterAuth): Promise<import("./dto/res.dto").ReadFollowMessageResponseDto[]>;
+    readAllFollower(user: UserAfterAuth): Promise<import("./dto/res.dto").ReadFollowerResponseDto[]>;
 }
