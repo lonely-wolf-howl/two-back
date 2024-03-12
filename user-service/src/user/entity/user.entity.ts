@@ -6,9 +6,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 import { UserDetail } from './user-detail.entity';
-import { Follow } from '../../follow/entity/follow.entity';
+import { Follower } from '../../follow/entity/follower.entity';
 import { FollowMessage } from '../../follow/entity/follow-message.entity';
 
 @Entity()
@@ -16,6 +17,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column({ unique: true })
   email: string;
 
@@ -31,8 +33,8 @@ export class User {
   @OneToOne(() => UserDetail, (userDetail) => userDetail.user)
   userDetail: UserDetail;
 
-  @OneToMany(() => Follow, (follow) => follow.user)
-  follow: Follow[];
+  @OneToMany(() => Follower, (follower) => follower.user)
+  follower: Follower[];
 
   @OneToMany(() => FollowMessage, (followMessage) => followMessage.user)
   followMessage: FollowMessage[];

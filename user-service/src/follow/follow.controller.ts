@@ -16,4 +16,15 @@ export class FollowController {
   }): Promise<{ id: string }> {
     return await this.followService.createFollowMessage(userId, followId);
   }
+
+  @MessagePattern({ cmd: 'accept-follow-request' })
+  async acceptFollowRequest({
+    userId,
+    followerId,
+  }: {
+    userId: string;
+    followerId: string;
+  }): Promise<{ id: string }> {
+    return await this.followService.acceptFollowRequest(userId, followerId);
+  }
 }

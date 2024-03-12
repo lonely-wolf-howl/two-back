@@ -5,21 +5,23 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
 
 @Entity()
-export class Follow {
+export class Follower {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column()
-  followId: string;
+  followerId: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.follow, {
+  @ManyToOne(() => User, (user) => user.follower, {
     cascade: true,
   })
   @JoinColumn()

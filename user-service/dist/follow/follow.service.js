@@ -17,11 +17,16 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const follow_message_entity_1 = require("./entity/follow-message.entity");
+const follower_entity_1 = require("./entity/follower.entity");
 let FollowService = class FollowService {
-    constructor(followMessageRepository) {
+    constructor(followMessageRepository, followerRepository) {
         this.followMessageRepository = followMessageRepository;
+        this.followerRepository = followerRepository;
     }
     async createFollowMessage(userId, followId) {
+        const isExist = await this.findFollowMessageByIds(userId, followId);
+        if (isExist)
+            throw new common_1.BadRequestException('친구 요청을 이미 보냈습니다.');
         const followMessageEntity = this.followMessageRepository.create({
             user: { id: userId },
             followId,
@@ -29,11 +34,34 @@ let FollowService = class FollowService {
         const followMessage = await this.followMessageRepository.save(followMessageEntity);
         return { id: followMessage.id };
     }
+    async acceptFollowRequest(userId, followerId) {
+        const followerEntity = this.followerRepository.create({
+            user: { id: userId },
+            followerId,
+        });
+        const follower = await this.followerRepository.save(followerEntity);
+        const followMessage = await this.findFollowMessageByIds(followerId, userId);
+        if (followMessage) {
+            await this.followMessageRepository.remove(followMessage);
+        }
+        return { id: follower.id };
+    }
+    async findFollowMessageByIds(userId, followId) {
+        const followMessage = await this.followMessageRepository.findOne({
+            where: {
+                user: { id: userId },
+                followId,
+            },
+        });
+        return followMessage;
+    }
 };
 exports.FollowService = FollowService;
 exports.FollowService = FollowService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(follow_message_entity_1.FollowMessage)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(follower_entity_1.Follower)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], FollowService);
 //# sourceMappingURL=follow.service.js.map

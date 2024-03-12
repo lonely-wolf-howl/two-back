@@ -1,5 +1,5 @@
 import { UserDetail } from './user-detail.entity';
-import { Follow } from '../../follow/entity/follow.entity';
+import { Follower } from '../../follow/entity/follower.entity';
 import { FollowMessage } from '../../follow/entity/follow-message.entity';
 export declare class User {
     id: string;
@@ -8,6 +8,6 @@ export declare class User {
     createdAt: Date;
     updatedAt: Date;
     userDetail: UserDetail;
-    follow: Follow[];
+    follower: Follower[];
     followMessage: FollowMessage[];
 }

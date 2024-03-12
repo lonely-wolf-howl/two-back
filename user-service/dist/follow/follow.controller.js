@@ -20,6 +20,9 @@ let FollowController = class FollowController {
     async createFollowMessage({ userId, followId, }) {
         return await this.followService.createFollowMessage(userId, followId);
     }
+    async acceptFollowRequest({ userId, followerId, }) {
+        return await this.followService.acceptFollowRequest(userId, followerId);
+    }
 };
 exports.FollowController = FollowController;
 __decorate([
@@ -28,6 +31,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "createFollowMessage", null);
+__decorate([
+    (0, microservices_1.MessagePattern)({ cmd: 'accept-follow-request' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "acceptFollowRequest", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

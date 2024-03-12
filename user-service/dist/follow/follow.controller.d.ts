@@ -8,4 +8,10 @@ export declare class FollowController {
     }): Promise<{
         id: string;
     }>;
+    acceptFollowRequest({ userId, followerId, }: {
+        userId: string;
+        followerId: string;
+    }): Promise<{
+        id: string;
+    }>;
 }

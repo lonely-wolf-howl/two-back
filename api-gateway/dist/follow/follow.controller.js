@@ -23,6 +23,9 @@ let FollowController = class FollowController {
     async createFollowMessage(user, followId) {
         return this.followService.createFollowMessage(user.id, followId);
     }
+    async acceptFollowRequest(user, followerId) {
+        return this.followService.acceptFollowRequest(user.id, followerId);
+    }
 };
 exports.FollowController = FollowController;
 __decorate([
@@ -33,6 +36,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], FollowController.prototype, "createFollowMessage", null);
+__decorate([
+    (0, common_1.Post)('/:followerId/accept'),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('followerId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], FollowController.prototype, "acceptFollowRequest", null);
 exports.FollowController = FollowController = __decorate([
     (0, common_1.Controller)('follows'),
     __metadata("design:paramtypes", [follow_service_1.FollowService])

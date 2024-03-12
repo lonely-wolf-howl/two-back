@@ -23,13 +23,22 @@ let FollowService = class FollowService {
         this.userService = userService;
     }
     async createFollowMessage(userId, followId) {
-        const user = await this.userService.findOneById(userId);
+        const user = await this.userService.findOneById(followId);
         if (!user)
             throw new common_1.NotFoundException();
         const pattern = { cmd: 'create-follow-message' };
         const payload = { userId, followId };
-        const { id: followMessageId } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
-        return followMessageId;
+        const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return id;
+    }
+    async acceptFollowRequest(userId, followerId) {
+        const follower = await this.userService.findOneById(followerId);
+        if (!follower)
+            throw new common_1.NotFoundException();
+        const pattern = { cmd: 'accept-follow-request' };
+        const payload = { userId, followerId };
+        const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return id;
     }
 };
 exports.FollowService = FollowService;

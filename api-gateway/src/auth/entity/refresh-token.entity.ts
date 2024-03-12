@@ -4,6 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 
 @Entity()
@@ -20,6 +21,7 @@ export class RefreshToken {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  @Index()
   @Column()
   userId: string;
 }

@@ -5,4 +5,5 @@ export declare class FollowService {
     private userService;
     constructor(client: ClientProxy, userService: UserService);
     createFollowMessage(userId: string, followId: string): Promise<string>;
+    acceptFollowRequest(userId: string, followerId: string): Promise<string>;
 }

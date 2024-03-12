@@ -14,4 +14,12 @@ export class FollowController {
   ) {
     return this.followService.createFollowMessage(user.id, followId);
   }
+
+  @Post('/:followerId/accept')
+  async acceptFollowRequest(
+    @User() user: UserAfterAuth,
+    @Param('followerId') followerId: string,
+  ) {
+    return this.followService.acceptFollowRequest(user.id, followerId);
+  }
 }

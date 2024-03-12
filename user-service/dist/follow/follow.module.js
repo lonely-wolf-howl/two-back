@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FollowModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const follow_entity_1 = require("./entity/follow.entity");
+const follower_entity_1 = require("./entity/follower.entity");
 const follow_message_entity_1 = require("./entity/follow-message.entity");
 const follow_controller_1 = require("./follow.controller");
 const follow_service_1 = require("./follow.service");
@@ -18,7 +18,7 @@ let FollowModule = class FollowModule {
 exports.FollowModule = FollowModule;
 exports.FollowModule = FollowModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([follow_entity_1.Follow, follow_message_entity_1.FollowMessage])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([follower_entity_1.Follower, follow_message_entity_1.FollowMessage])],
         controllers: [follow_controller_1.FollowController],
         providers: [follow_service_1.FollowService],
         exports: [follow_service_1.FollowService],
