@@ -11,7 +11,6 @@ const common_1 = require("@nestjs/common");
 const chat_module_1 = require("./chat/chat.module");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
-const jwt_config_1 = require("./config/jwt.config");
 const mysql_config_1 = require("./config/mysql.config");
 const sentry_config_1 = require("./config/sentry.config");
 let AppModule = class AppModule {
@@ -22,7 +21,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                load: [jwt_config_1.default, mysql_config_1.default, sentry_config_1.default],
+                load: [mysql_config_1.default, sentry_config_1.default],
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 inject: [config_1.ConfigService],

@@ -19,6 +19,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const message_entity_1 = require("./entity/message.entity");
 const common_1 = require("@nestjs/common");
+const jwt_guard_1 = require("../auth/jwt.guard");
 let ChatsGateway = class ChatsGateway {
     constructor(messageRepository) {
         this.messageRepository = messageRepository;
@@ -34,7 +35,9 @@ let ChatsGateway = class ChatsGateway {
     async handleDisconnect(socket) {
         this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
     }
-    async handleSubmitChat(message, socket) { }
+    async handleSubmitChat({ message }) {
+        console.log('MESSAGE FROM CLIENT:', message);
+    }
 };
 exports.ChatsGateway = ChatsGateway;
 __decorate([
@@ -50,14 +53,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleDisconnect", null);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('send-message'),
+    (0, websockets_1.SubscribeMessage)('message'),
     __param(0, (0, websockets_1.MessageBody)()),
-    __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, socket_io_1.Socket]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleSubmitChat", null);
 exports.ChatsGateway = ChatsGateway = __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, websockets_1.WebSocketGateway)(8080, {
         transports: ['websocket'],
         namespace: 'chats',

@@ -11,8 +11,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from './entity/message.entity';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @WebSocketGateway(8080, {
   transports: ['websocket'],
   namespace: 'chats',
@@ -44,9 +46,8 @@ export class ChatsGateway
     this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
   }
 
-  @SubscribeMessage('send-message')
-  async handleSubmitChat(
-    @MessageBody() message: string,
-    @ConnectedSocket() socket: Socket,
-  ) {}
+  @SubscribeMessage('message')
+  async handleSubmitChat(@MessageBody() { message }: { message: string }) {
+    console.log('MESSAGE FROM CLIENT:', message);
+  }
 }

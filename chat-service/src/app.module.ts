@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ChatModule } from './chat/chat.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import jwtConfig from './config/jwt.config';
 import mysqlConfig from './config/mysql.config';
 import sentryConfig from './config/sentry.config';
 
@@ -10,7 +9,7 @@ import sentryConfig from './config/sentry.config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [jwtConfig, mysqlConfig, sentryConfig],
+      load: [mysqlConfig, sentryConfig],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],

@@ -1,38 +1,27 @@
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import * as jwt from 'jsonwebtoken';
 
-@Injectable()
 export class JwtAuthGuard {
-  constructor(
-    private jwtService: JwtService,
-    private configService: ConfigService,
-  ) {}
-
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const client = context.switchToWs().getClient();
 
-    const token = client.handshake.auth;
+    const token = client.handshake.query.token;
     if (!token) throw new UnauthorizedException();
-    const payload = this.validate(token);
-    console.log(payload);
+    const userId = this.validate(token);
+    console.log('userId:', userId);
 
-    const chatRoomId = client.handshake.headers['id'];
-    console.log(chatRoomId);
+    const chatRoomId = client.handshake.query.id;
+    console.log('chatRoomId:', chatRoomId);
 
     return true;
   }
 
-  async validate(token: string) {
-    const secret = this.configService.get<string>('jwt.secret');
-    const payload = this.jwtService.verify(token, { secret });
-    return payload;
+  validate(token: string) {
+    const secret = process.env.JWT_SECRET;
+    const payload = jwt.verify(token, secret);
+    return payload.sub;
   }
 }
