@@ -58,9 +58,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleSubmitChat", null);
 exports.ChatsGateway = ChatsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(8080, {
+        transports: ['websocket'],
         namespace: 'chats',
-        cors: true,
+        cors: {
+            origin: ['http://localhost:3000'],
+        },
     }),
     __param(0, (0, typeorm_1.InjectRepository)(message_entity_1.Message)),
     __metadata("design:paramtypes", [typeorm_2.Repository])

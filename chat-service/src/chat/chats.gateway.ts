@@ -13,9 +13,12 @@ import { Repository } from 'typeorm';
 import { Message } from './entity/message.entity';
 import { Logger } from '@nestjs/common';
 
-@WebSocketGateway({
+@WebSocketGateway(8080, {
+  transports: ['websocket'],
   namespace: 'chats',
-  cors: true,
+  cors: {
+    origin: ['http://localhost:3000'],
+  },
 })
 export class ChatsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
