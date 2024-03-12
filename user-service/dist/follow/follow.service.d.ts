@@ -8,8 +8,12 @@ export declare class FollowService {
     createFollowMessage(userId: string, followId: string): Promise<{
         id: string;
     }>;
-    acceptFollowRequest(userId: string, followerId: string): Promise<{
+    createFollower(userId: string, followerId: string): Promise<{
         id: string;
     }>;
+    readAllFollowMessage(userId: string): Promise<{
+        followMessages: FollowMessage[];
+    }>;
     findFollowMessageByIds(userId: string, followId: string): Promise<FollowMessage>;
+    findFollowerByIds(userId: string, followerId: string): Promise<Follower>;
 }

@@ -14,24 +14,33 @@ export class FollowService {
   ) {}
 
   async createFollowMessage(userId: string, followId: string) {
-    const isExist = await this.findFollowMessageByIds(userId, followId);
-    if (isExist) throw new BadRequestException('친구 요청을 이미 보냈습니다.');
+    const isExistFollowMessage = await this.findFollowMessageByIds(
+      userId,
+      followId,
+    );
+    if (isExistFollowMessage) {
+      throw new BadRequestException('친구 요청을 이미 보냈습니다.');
+    }
 
-    const followMessageEntity = this.followMessageRepository.create({
+    const isExistFollower = await this.findFollowerByIds(followId, userId);
+    if (isExistFollower) {
+      throw new BadRequestException('해당 사용자와 이미 친구 관계입니다.');
+    }
+
+    const entity = this.followMessageRepository.create({
       user: { id: userId },
       followId,
     });
-    const followMessage =
-      await this.followMessageRepository.save(followMessageEntity);
+    const followMessage = await this.followMessageRepository.save(entity);
     return { id: followMessage.id };
   }
 
-  async acceptFollowRequest(userId: string, followerId: string) {
-    const followerEntity = this.followerRepository.create({
+  async createFollower(userId: string, followerId: string) {
+    const entity = this.followerRepository.create({
       user: { id: userId },
       followerId,
     });
-    const follower = await this.followerRepository.save(followerEntity);
+    const follower = await this.followerRepository.save(entity);
 
     const followMessage = await this.findFollowMessageByIds(followerId, userId);
     if (followMessage) {
@@ -39,6 +48,15 @@ export class FollowService {
     }
 
     return { id: follower.id };
+  }
+
+  async readAllFollowMessage(userId: string) {
+    const followMessages = await this.followMessageRepository.find({
+      where: {
+        followId: userId,
+      },
+    });
+    return { followMessages };
   }
 
   async findFollowMessageByIds(userId: string, followId: string) {
@@ -49,5 +67,15 @@ export class FollowService {
       },
     });
     return followMessage;
+  }
+
+  async findFollowerByIds(userId: string, followerId: string) {
+    const follower = await this.followerRepository.findOne({
+      where: {
+        user: { id: userId },
+        followerId,
+      },
+    });
+    return follower;
   }
 }

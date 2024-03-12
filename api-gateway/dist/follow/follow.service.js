@@ -31,14 +31,20 @@ let FollowService = class FollowService {
         const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return id;
     }
-    async acceptFollowRequest(userId, followerId) {
+    async createFollower(userId, followerId) {
         const follower = await this.userService.findOneById(followerId);
         if (!follower)
             throw new common_1.NotFoundException();
-        const pattern = { cmd: 'accept-follow-request' };
+        const pattern = { cmd: 'create-follower' };
         const payload = { userId, followerId };
         const { id } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
         return id;
+    }
+    async readAllFollowMessage(userId) {
+        const pattern = { cmd: 'read-all-followe-message' };
+        const payload = { userId };
+        const { followMessages } = await (0, rxjs_1.firstValueFrom)(this.client.send(pattern, payload));
+        return followMessages;
     }
 };
 exports.FollowService = FollowService;

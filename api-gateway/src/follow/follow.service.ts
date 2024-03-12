@@ -2,6 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { UserService } from '../user/user.service';
+import { ReadFollowMessageResponseDto } from './dto/res.dto';
 
 @Injectable()
 export class FollowService {
@@ -22,15 +23,29 @@ export class FollowService {
     return id;
   }
 
-  async acceptFollowRequest(userId: string, followerId: string) {
+  async createFollower(userId: string, followerId: string) {
     const follower = await this.userService.findOneById(followerId);
     if (!follower) throw new NotFoundException();
 
-    const pattern = { cmd: 'accept-follow-request' };
+    const pattern = { cmd: 'create-follower' };
     const payload = { userId, followerId };
     const { id } = await firstValueFrom<{ id: string }>(
       this.client.send<{ id: string }>(pattern, payload),
     );
     return id;
+  }
+
+  async readAllFollowMessage(userId: string) {
+    const pattern = { cmd: 'read-all-followe-message' };
+    const payload = { userId };
+    const { followMessages } = await firstValueFrom<{
+      followMessages: ReadFollowMessageResponseDto[];
+    }>(
+      this.client.send<{ followMessages: ReadFollowMessageResponseDto[] }>(
+        pattern,
+        payload,
+      ),
+    );
+    return followMessages;
   }
 }

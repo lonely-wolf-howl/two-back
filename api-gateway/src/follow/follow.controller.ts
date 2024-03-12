@@ -1,4 +1,4 @@
-import { Controller, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { User } from '../common/decorator/user.decorator';
 import { UserAfterAuth } from '../common/decorator/user.decorator';
 import { FollowService } from './follow.service';
@@ -16,10 +16,15 @@ export class FollowController {
   }
 
   @Post('/:followerId/accept')
-  async acceptFollowRequest(
+  async createFollower(
     @User() user: UserAfterAuth,
     @Param('followerId') followerId: string,
   ) {
-    return this.followService.acceptFollowRequest(user.id, followerId);
+    return this.followService.createFollower(user.id, followerId);
+  }
+
+  @Get()
+  async readAllFollowMessage(@User() user: UserAfterAuth) {
+    return this.followService.readAllFollowMessage(user.id);
   }
 }
