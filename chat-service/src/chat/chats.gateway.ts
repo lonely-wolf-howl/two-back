@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,6 +7,7 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -34,20 +35,43 @@ export class ChatsGateway
     this.logger.log('constructor');
   }
 
+  @WebSocketServer()
+  server: Server;
+
   afterInit() {
     this.logger.log('init');
   }
 
   async handleConnection(@ConnectedSocket() socket: Socket) {
-    this.logger.log(`connected: ${socket.id} ${socket.nsp.name}`);
+    this.logger.log(`SOCKET CONNECTED: ${socket.id}`);
   }
 
   async handleDisconnect(@ConnectedSocket() socket: Socket) {
-    this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
+    this.logger.log(`SOCKET DISCONNECTED: ${socket.id}`);
+  }
+
+  @SubscribeMessage('join')
+  async handleJoinRoom(
+    @MessageBody() { roomId }: { roomId: string },
+    @ConnectedSocket() socket: Socket,
+  ) {
+    socket.join(roomId);
+    this.logger.log(`SOCKET(${socket.id}) JOINED ROOM(${roomId})`);
   }
 
   @SubscribeMessage('message')
-  async handleSubmitChat(@MessageBody() { message }: { message: string }) {
-    console.log('MESSAGE FROM CLIENT:', message);
+  async handleMessage(
+    @MessageBody()
+    {
+      message,
+      userId,
+    }: {
+      message: string;
+      userId: string;
+    },
+    @ConnectedSocket() socket: Socket,
+  ) {
+    this.logger.log(`MESSAGE FROM USER(${userId}): ${message}`);
+    socket.broadcast.emit('message', { message, userId });
   }
 }

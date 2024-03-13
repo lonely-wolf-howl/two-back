@@ -8,7 +8,7 @@ class JwtAuthGuard {
         const client = context.switchToWs().getClient();
         const token = client.handshake.query.token;
         if (!token)
-            throw new common_1.UnauthorizedException();
+            throw new common_1.UnauthorizedException('유효하지 않은 접근입니다.');
         const userId = this.validate(token);
         console.log('userId:', userId);
         const chatRoomId = client.handshake.query.id;

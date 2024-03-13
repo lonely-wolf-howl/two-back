@@ -9,7 +9,7 @@ export class JwtAuthGuard {
     const client = context.switchToWs().getClient();
 
     const token = client.handshake.query.token;
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new UnauthorizedException('유효하지 않은 접근입니다.');
     const userId = this.validate(token);
     console.log('userId:', userId);
 

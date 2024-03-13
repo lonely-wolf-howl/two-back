@@ -30,16 +30,25 @@ let ChatsGateway = class ChatsGateway {
         this.logger.log('init');
     }
     async handleConnection(socket) {
-        this.logger.log(`connected: ${socket.id} ${socket.nsp.name}`);
+        this.logger.log(`SOCKET CONNECTED: ${socket.id}`);
     }
     async handleDisconnect(socket) {
-        this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
+        this.logger.log(`SOCKET DISCONNECTED: ${socket.id}`);
     }
-    async handleSubmitChat({ message }) {
-        console.log('MESSAGE FROM CLIENT:', message);
+    async handleJoinRoom({ roomId }, socket) {
+        socket.join(roomId);
+        this.logger.log(`SOCKET(${socket.id}) JOINED ROOM(${roomId})`);
+    }
+    async handleMessage({ message, userId, }, socket) {
+        this.logger.log(`MESSAGE FROM USER(${userId}): ${message}`);
+        socket.broadcast.emit('message', { message, userId });
     }
 };
 exports.ChatsGateway = ChatsGateway;
+__decorate([
+    (0, websockets_1.WebSocketServer)(),
+    __metadata("design:type", socket_io_1.Server)
+], ChatsGateway.prototype, "server", void 0);
 __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
@@ -53,12 +62,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleDisconnect", null);
 __decorate([
+    (0, websockets_1.SubscribeMessage)('join'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], ChatsGateway.prototype, "handleJoinRoom", null);
+__decorate([
     (0, websockets_1.SubscribeMessage)('message'),
     __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
-], ChatsGateway.prototype, "handleSubmitChat", null);
+], ChatsGateway.prototype, "handleMessage", null);
 exports.ChatsGateway = ChatsGateway = __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, websockets_1.WebSocketGateway)(8080, {
